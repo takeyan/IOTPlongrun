@@ -1,12 +1,10 @@
 applications:
 - disk_quota: 1024M
-  host: takeyan-subCloudant98
-  name: takeyan-subCloudant98
+  host: takeyan-loop21
+  name: takeyan-loop21
   path: .
   domain: mybluemix.net
   instances: 1
   memory: 512M
   buildpack: nodejs_buildpack
-services:
-- Cloudant NoSQL DB-5u
 

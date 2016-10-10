@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node subCloudant98.js"
+    "start": "node loop21.js"
   },
   "author": "",
   "license": "ISC",

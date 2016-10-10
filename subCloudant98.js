@@ -19,7 +19,7 @@ if (typeof process.env.VCAP_SERVICES === 'undefined') {
     };
 var username = credentials.username;
 var password = credentials.password;
-var cloudant = Cloudant({account:username, password:password});
+var cloudant = Cloudant({account:username, password:password, plugin:'retry'});
 // console.log("dbname=" + dbname);
 
 cloudant.db.destroy(dbname);

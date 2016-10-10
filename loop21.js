@@ -1,9 +1,9 @@
 var Client = require("ibmiotf");
 
 // 負荷条件
-var interval = 500 ; 				// 各デバイスの送信間隔[msec]
-var repeat = 5 ; 				// 各デバイスの送信回数[回]
-var size = 100; 				//送信データサイズ（バイト）
+var interval = 1000 ; 				// 各デバイスの送信間隔[msec]
+var repeat = 1000 ; 				// 各デバイスの送信回数[回]
+var size = 2000; 				//送信データサイズ（バイト）
 var org = "bf8dsi";				//IOTP組織ID
 var deviceInfo = require("./dev501.json"); 	// デバイス定義
 // var deviceInfo = require("./dev301_310.json"); 	// デバイス定義
