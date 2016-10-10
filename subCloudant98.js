@@ -4,17 +4,19 @@ var Cloudant = require("cloudant");
 var org = "bf8dsi";				//IOTP組織ID
 var apikey = "a-bf8dsi-klpbvn9ant";     // API Key
 var apiauth =  "wZAkUucqxklGaCStuZ";    // 認証トークン
-var deviceInfo = require("./dev101_110.json");     // デバイス定義
+var deviceInfo = require("./dev501.json");     // デバイス定義
 
 // Initialize Cloudant 
-var dbname = "iotstress_" + (new Date()).toISOString().replace(".","_").replace(/:/g,"_").replace(/T/,"_").replace(/Z/,"");
+var dbname = "longrun_" + (new Date()).toISOString().replace(".","_").replace(/:/g,"_").replace(/T/,"_").replace(/Z/,"");
+
+var credentials = null;
 
 if (typeof process.env.VCAP_SERVICES === 'undefined') {
-    var services = require('./cloudant.json');
+    credentials = require('./cloudant.json');
     } else {
-    services = JSON.parse(process.env.VCAP_SERVICES)
+    var services = JSON.parse(process.env.VCAP_SERVICES)
+    credentials = services['cloudantNoSQLDB'][0].credentials;
     };
-var credentials = services['cloudantNoSQLDB'][0].credentials;
 var username = credentials.username;
 var password = credentials.password;
 var cloudant = Cloudant({account:username, password:password});
@@ -32,9 +34,11 @@ var size = 2048; // payloadのサイズのデフォルト値（スループッ�
 // メッセージ件数カウント用配列および受信時刻保存用配列の初期化
 var device = new Array();
 var recTime = new Array();
+var prevIsrtTime = new Array();
 for (var i=0 ; i<deviceInfo.length ; i++ ){
     device[deviceInfo[i].deviceId] = 0;
     recTime[deviceInfo[i].deviceId] = new Date();
+    prevIsrtTime[deviceInfo[i].deviceId] = 0;
 }
 
 // IOTPに接続
@@ -69,7 +73,8 @@ appClient.on("deviceEvent", function (deviceType, deviceId, eventType, format, p
      recTime[deviceId] = new Date();
      var jpayload = JSON.parse(payload); // payloadをJSONオブジェクト化
      jpayload.d.subscribeTime = recTime[deviceId].getTime(); // 受信時刻をミリ秒に変換してpayloadに追加
-     dbInsert(jpayload);
+     jpayload.d.prevIsrtTime = prevIsrtTime[deviceId]; //一回前のCloudantインサート実行後の時刻を追加
+     prevIsrtTime[deviceId] = dbInsert(jpayload); // インサートして実行後の時刻を保管
 });
 
 appClient.on("error", function (err) {
@@ -112,6 +117,7 @@ var dbInsert = function(dt){
         console.log('### payload = ' + dt);
         }
     });
+    return (new Date()).getTime();
 }
 
 // 日付フォーマット用関数
