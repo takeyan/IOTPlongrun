@@ -1,0 +1,10 @@
+applications:
+- disk_quota: 1024M
+  host: takeyan-loop21
+  name: takeyan-loop21
+  path: .
+  domain: mybluemix.net
+  instances: 1
+  memory: 512M
+  buildpack: nodejs_buildpack
+
