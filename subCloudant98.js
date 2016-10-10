@@ -82,7 +82,7 @@ appClient.on("error", function (err) {
 });
 
 // 一定間隔で進捗表示
-var loop = setInterval(function(){statMon(null)},5000);
+var loop = setInterval(function(){statMon(null)},600000);
 
 // CTRL+Cで終了時の集計処理
 process.on("SIGINT", function(){statMon("SIGINT")});
